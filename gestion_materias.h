@@ -3,17 +3,13 @@
 #include <stdlib.h>
 
 
-
 int validar_creditos(int num)
 {
     if (num >= 0 && num <= 20)
     {
         return 1;
     }
-    else
-    {
-        return 0;
-    }
+   return 0;
 }
 
 int validar_costo_cred(int num)
@@ -22,10 +18,7 @@ int validar_costo_cred(int num)
     {
         return 1;
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
 }
 
 int buscar_materia(struct Materia *arr_materia, int cont_mat, char *codigo){
@@ -42,7 +35,6 @@ int buscar_materia(struct Materia *arr_materia, int cont_mat, char *codigo){
     return encontrado;
     printf("encontrado en buscar materia: ", encontrado);
 }
-
 
 
 struct Materia crear_materia()
@@ -108,6 +100,7 @@ void validar_codigo_mat(struct Materia *arr_materia, int cont_mat){
         scanf("%s", &codigo);
         encontrado = buscar_materia(arr_materia, cont_mat, codigo); 
     } while (encontrado == 1);
+    
     if (encontrado == 0)
     {
         agregar_materia(arr_materia, cont_mat);

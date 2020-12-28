@@ -19,7 +19,7 @@ void agregar_matricula(struct Mov_matricula *arr_matricula, int cont_matri, stru
     crear_arr_matricula(arr_matricula, cont_matri, arr_estudiante, con_est, arr_materia, cont_mat);
 }
 
-void imprimir_inscripciones(struct Mov_matricula *arr_matricula, int cont_matri)
+void imprimir_matricula(struct Mov_matricula *arr_matricula, int cont_matri)
 {
     for (int i = 0; i < cont_matri; i++)
     {
@@ -27,7 +27,7 @@ void imprimir_inscripciones(struct Mov_matricula *arr_matricula, int cont_matri)
     }
 }
 
-int validar_codigo_de_est_y_mat(struct Mov_matricula *arr_matricula, int cont_matri, struct Estudiante *arr_estudiante, struct Materia *arr_materia, char *cod_est_ingresado, char *cod_mat_ingresado)
+int validar_codigo_de_est_y_mat(struct Mov_matricula *arr_matricula, int cont_matri, char *cod_est_ingresado, char *cod_mat_ingresado)
 {
     for (int i = 0; i < cont_matri; i++)
     {
@@ -70,20 +70,11 @@ void validar_matricula(struct Mov_matricula *arr_matricula, int cont_matri, stru
 
         if (est_encontrado == 1 && mat_encontrado == 1)
         {
-            comparacion_codigos_mat_est = validar_codigo_de_est_y_mat(arr_matricula, cont_matri, arr_estudiante, arr_materia, codigo_est, codigo_mat);
-        }
-        printf("\nen el while: est_encontrado %d, mat_encontrado %d, comparacion %d,", est_encontrado, mat_encontrado, comparacion_codigos_mat_est);
-        printf("\ncontador estudiante %d, materia %d , matricula %d\n", cont_est, cont_mat, cont_matri);
+            comparacion_codigos_mat_est = validar_codigo_de_est_y_mat(arr_matricula, cont_matri, codigo_est, codigo_mat);
+        }        
 
     } while (comparacion_codigos_mat_est == 1);
-
-    printf("\nespues del while: est_encontrado %d, mat_encontrado %d, comparacion %d,", est_encontrado, mat_encontrado, comparacion_codigos_mat_est);
-    printf("\ncontador estudiante %d, materia %d , matricula %d\n", cont_est, cont_mat, cont_matri);
-
-    imprimir_estudiante(arr_estudiante, cont_est);
-    imprimir_materia(arr_materia, cont_mat);
-    imprimir_inscripciones(arr_matricula, cont_matri);
-
+    
     agregar_matricula(arr_matricula, cont_mat, arr_estudiante, cont_est, arr_materia, cont_mat);
     strcpy(arr_matricula[cont_matri].cod_estudiante, codigo_est);
     strcpy(arr_matricula[cont_matri].cod_materia, codigo_mat);

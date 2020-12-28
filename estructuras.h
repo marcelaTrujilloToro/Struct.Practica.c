@@ -9,6 +9,7 @@ struct Estudiante
     char codigo[15];
     int edad;
     int estrato;
+    char genero;
 };
 
 struct Materia
@@ -30,4 +31,13 @@ struct Contador
     int cont_estudiante;
     int cont_materia;
     int cont_matricula;
+    int cont_nota;
+};
+
+struct Nota
+{
+    char cod_estudiante[15];
+    char cod_materia[15];
+    float nota;
+    
 };

@@ -2,8 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 
- 
-
 int validar_edad(int num)
 {
 
@@ -11,10 +9,7 @@ int validar_edad(int num)
     {
         return 1;
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
 }
 
 int validar_estrato(int num)
@@ -24,10 +19,19 @@ int validar_estrato(int num)
     {
         return 1;
     }
-    else
+    return 0;
+}
+
+int validar_genero(char genero)
+{
+    char femenino = 'f';
+    char masculino = 'm';
+
+    if (genero == femenino || genero == masculino)
     {
-        return 0;
+        return 1;
     }
+    return 0;
 }
 
 int buscar_est(struct Estudiante *arr_estudiante, int cont_est, char *busqueda)
@@ -72,6 +76,15 @@ struct Estudiante solicitar_datos()
         scanf("%d", &e.estrato);
     } while (validar_estrato(e.estrato) == 0);
 
+    char femenino[1] = "f";
+    char masculino[1] = "m";
+
+    do
+    {
+        printf("\nIngrese el genero (f 0 m): ");
+        scanf("%s", &e.genero);
+    } while (validar_genero(e.genero) == 0);
+
     return e;
 }
 
@@ -87,11 +100,11 @@ void agregar_estudiante(struct Estudiante *arr_estudiante, int cont_est)
 
 void imprimir_estudiante(struct Estudiante *arr_estudiante, int cont_est)
 {
-    
+
     for (int i = 0; i < cont_est; i++)
-    
+
     {
-        printf("Estudiante: %s %s %s %s tiene codigo %s, edad %d y estrato %d\n", arr_estudiante[i].primer_nombre, arr_estudiante[i].segundo_nombre, arr_estudiante[i].primer_apellido, arr_estudiante[i].segundo_apellido, arr_estudiante[i].codigo, arr_estudiante[i].edad, arr_estudiante[i].estrato);
+        printf("Estudiante: %s %s %s %s tiene codigo %s, edad %d,  estrato %d y genero %c\n", arr_estudiante[i].primer_nombre, arr_estudiante[i].segundo_nombre, arr_estudiante[i].primer_apellido, arr_estudiante[i].segundo_apellido, arr_estudiante[i].codigo, arr_estudiante[i].edad, arr_estudiante[i].estrato, arr_estudiante[i].genero);
     }
 }
 
@@ -179,7 +192,6 @@ void validar_codigo(struct Estudiante *arr_estudiante, int cont_est)
 
     if (encontrado == 0)
     {
-
         agregar_estudiante(arr_estudiante, cont_est);
         strcpy(arr_estudiante[cont_est].codigo, codigo);
     }
