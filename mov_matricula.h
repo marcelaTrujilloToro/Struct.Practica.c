@@ -37,8 +37,6 @@ int validar_codigo_de_est_y_mat(struct Mov_matricula *arr_matricula, int cont_ma
         }
     }
     return 0;
-
-    printf("cod est %s, cod_est_ingre %s, cod mat %s, cod_mat_ingre %s ", cod_est_ingresado, cod_mat_ingresado);
 }
 
 void validar_matricula(struct Mov_matricula *arr_matricula, int cont_matri, struct Estudiante *arr_estudiante, int cont_est, struct Materia *arr_materia, int cont_mat)

@@ -41,3 +41,10 @@ struct Nota
     float nota;
     
 };
+
+#define MAX_ESTUDIANTES 100
+#define MAX_MATERIAS 100
+#define MAX_MATRICULA 1000
+#define MAX_NOTAS 10000
+
+#define OPCION_SAL 6

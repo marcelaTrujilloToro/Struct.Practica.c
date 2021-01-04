@@ -48,7 +48,6 @@ int buscar_est(struct Estudiante *arr_estudiante, int cont_est, char *busqueda)
         encontrado = 0;
     }
     return encontrado;
-    printf("encontrado en buscar_est: %d", encontrado);
 }
 
 struct Estudiante solicitar_datos()
@@ -81,7 +80,7 @@ struct Estudiante solicitar_datos()
 
     do
     {
-        printf("\nIngrese el genero (f 0 m): ");
+        printf("\nIngrese el genero (f o m): ");
         scanf("%s", &e.genero);
     } while (validar_genero(e.genero) == 0);
 
@@ -163,19 +162,21 @@ void menor_edad(struct Estudiante *arr_estudiante, int cont_est)
     printf("\nLa menor edad es: %d, del estudiante: %s %s %s %s ", menor, e1.primer_nombre, e1.segundo_nombre, e1.primer_apellido, e1.segundo_apellido);
 }
 
-int buscar_est_por_codigo(struct Estudiante *arr_estudiante, int cont_est)
+struct Estudiante buscar_est_por_codigo(struct Estudiante *arr_estudiante, int cont_est, char *busqueda)
 {
-    printf("\nDigite el codigo el estudiante a buscar: ");
-    char busqueda[15];
-    scanf("%s", &busqueda);
-    if (buscar_est(arr_estudiante, cont_est, busqueda) == 1)
+    for (int i = 0; i < cont_est; i++)
     {
-        printf("\nEste codigo %s ya existe.\n", busqueda);
+        if (strcmp(busqueda, arr_estudiante[i].codigo) == 0)
+        {
+            return arr_estudiante[i];
+        }
     }
-    else
-    {
-        printf("\nEste codigo: %s no existe.\n", busqueda);
-    }
+
+    struct Estudiante estudiante = {
+        .codigo = "-1",
+    };
+
+    return estudiante;
 }
 
 void validar_codigo(struct Estudiante *arr_estudiante, int cont_est)

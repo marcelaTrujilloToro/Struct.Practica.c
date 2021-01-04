@@ -5,8 +5,6 @@
 #define MAX_ESTUDIANTES 100
 #define OPCION_SALIR 8
 
-
-
 void menu_est(struct Estudiante *arr_estudiante, struct Contador *contador)
 {
 
@@ -30,7 +28,7 @@ void menu_est(struct Estudiante *arr_estudiante, struct Contador *contador)
         switch (opcion)
         {
         case 1:
-            validar_codigo(arr_estudiante, contador->cont_estudiante);            
+            validar_codigo(arr_estudiante, contador->cont_estudiante);
             contador->cont_estudiante++;
             break;
 
@@ -50,7 +48,12 @@ void menu_est(struct Estudiante *arr_estudiante, struct Contador *contador)
             menor_edad(arr_estudiante, contador->cont_estudiante);
             break;
         case 7:
-            buscar_est_por_codigo(arr_estudiante, contador->cont_estudiante);
+        {
+            printf("\nDigite el codigo a buscar: ");
+            char busqueda[15];
+            scanf("%s", &busqueda);
+            buscar_est_por_codigo(arr_estudiante, contador->cont_estudiante, busqueda);
+        }
         }
 
     } while (opcion != OPCION_SALIR);

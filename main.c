@@ -10,13 +10,9 @@
 #include "menu_matricula.h"
 #include "gestion_notas.h"
 #include "menu_ingreso_nota.h"
+#include "informes.h"
+#include "menu_informes.h"
 
-#define MAX_ESTUDIANTES 100
-#define MAX_MATERIAS 100
-#define MAX_MATRICULA 1000
-#define MAX_NOTAS 10000
-
-#define OPCION_SAL 5
 
 int main()
 {
@@ -40,13 +36,14 @@ int main()
 
     do
     {
-        printf("\nMENU");
-        printf("\n----\n");
+        printf("\nMENU PRINCIPAL");
+        printf("\n--------------\n");
         printf("1. Gestionar estudiante\n");
         printf("2. Gestionar materia\n");
         printf("3. Realizar una matricula\n");
         printf("4. Digitar nota\n");
-        printf("5. Salir\n");
+        printf("5. Informes\n");
+        printf("6. Salir\n");
 
         printf("Digite una opcion:\n");
         scanf("%d", &opcion);
@@ -64,6 +61,9 @@ int main()
             break;
         case 4:
             menu_nota(arr_matricula, arr_nota, &contador);
+            break;
+        case 5:
+            menu_informe(arr_nota, arr_estudiante, arr_materia, &contador);
             break;
         }
 

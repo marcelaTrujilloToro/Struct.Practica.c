@@ -68,3 +68,4 @@ void validar_ingreso_nota(struct Mov_matricula *arr_matricula, int cont_matricul
     strcpy(arr_nota[cont_nota].cod_estudiante, codigo_est);
     strcpy(arr_nota[cont_nota].cod_materia, codigo_mat);
 }
+

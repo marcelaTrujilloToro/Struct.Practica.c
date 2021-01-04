@@ -76,18 +76,31 @@ void imprimir_materia(struct Materia *arr_materia, int cont_mat){
     }   
 }
 
-void buscar_mat_por_codigo(struct Materia *arr_materia, int cont_mat){
+struct Materia buscar_mat_por_codigo(struct Materia *arr_materia, int cont_mat){
+    
+    struct Materia materia;
+
     printf("\n Digite el codigo de la materia a buscar:");
     char busqueda[15];
     scanf("%s", &busqueda);
-    if (buscar_materia(arr_materia, cont_mat, busqueda) == 1)
+
+    int encontrado = buscar_materia(arr_materia, cont_mat, busqueda);
+
+    if (encontrado == 1)
     {
-        printf("\nEste codigo %s ya existe.\n", busqueda);
+       for (int i = 0; i < cont_mat; i++)
+        {
+            if (strcmp(busqueda, arr_materia[i].codigo) == 0)
+            {
+                materia = arr_materia[i];
+            }           
+        } 
+        printf("Materia: %s, codigo: %s \n", materia.nombre, materia.codigo);
     }else
     {
-        printf("\nEste codigo: %s no existe.\n", busqueda);
+        printf("El codigo no existe.\n");
     }
-    
+    return materia;  
     
 }
 
