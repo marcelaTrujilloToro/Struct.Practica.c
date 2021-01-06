@@ -23,6 +23,7 @@ int main()
     contador.cont_materia = 0;
     contador.cont_matricula = 0;
     contador.cont_nota = 0;
+    contador.cont_asig_est_no_repetidos = 0;
 
     struct Estudiante *arr_estudiante = malloc(MAX_ESTUDIANTES * sizeof(struct Estudiante));
 
@@ -31,6 +32,8 @@ int main()
     struct Mov_matricula *arr_matricula = malloc(MAX_MATRICULA * sizeof(struct Mov_matricula));
 
     struct Nota *arr_nota = malloc(MAX_NOTAS * sizeof(struct Nota));
+
+    
 
     int opcion = 0;
 
@@ -68,4 +71,9 @@ int main()
         }
 
     } while (opcion != OPCION_SAL);
+
+    free(arr_estudiante);
+    free(arr_materia);
+    free(arr_nota);
+    free(arr_matricula);
 }

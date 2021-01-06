@@ -32,6 +32,7 @@ struct Contador
     int cont_materia;
     int cont_matricula;
     int cont_nota;
+    int cont_asig_est_no_repetidos;
 };
 
 struct Nota

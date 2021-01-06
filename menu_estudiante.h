@@ -52,7 +52,12 @@ void menu_est(struct Estudiante *arr_estudiante, struct Contador *contador)
             printf("\nDigite el codigo a buscar: ");
             char busqueda[15];
             scanf("%s", &busqueda);
-            buscar_est_por_codigo(arr_estudiante, contador->cont_estudiante, busqueda);
+            struct Estudiante estudiante;
+            estudiante = buscar_est_por_codigo(arr_estudiante, contador->cont_estudiante, busqueda);
+            char nombre_completo[84];
+            obt_nombre_completo_est(estudiante, nombre_completo);
+            printf("%s", nombre_completo);
+
         }
         }
 

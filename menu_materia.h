@@ -32,7 +32,12 @@ void menu_mat(struct Materia *arr_materia, struct Contador *contador)
             imprimir_materia(arr_materia, contador->cont_materia);
             break;
         case 3:
-            buscar_mat_por_codigo(arr_materia, contador->cont_materia);
+            printf("\n Digite el codigo de la materia a buscar:");
+            char busqueda[15];
+            scanf("%s", &busqueda);
+            struct Materia materia;
+            materia = buscar_mat_por_codigo(arr_materia, contador->cont_materia, busqueda);
+            printf("%s", materia.nombre);
         }
     } while (opcion != OPCION);
 }

@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+void obt_nombre_completo_est(struct Estudiante estudiante, char *nombre_completo);
+
 int validar_edad(int num)
 {
 
@@ -134,32 +136,34 @@ void mostrar_prome_edad(struct Estudiante *arr_estudiante, int cont_est)
 
 void mayor_edad(struct Estudiante *arr_estudiante, int cont_est)
 {
-    int mayor = arr_estudiante[0].edad;
-    struct Estudiante e1;
-    for (int i = 0; i < cont_est; i++)
+    struct Estudiante estudiante_mayor = arr_estudiante[0];
+
+    for (int i = 1; i < cont_est; i++)
     {
-        if (arr_estudiante[i].edad > mayor)
+        if (arr_estudiante[i].edad > estudiante_mayor.edad)
         {
-            mayor = arr_estudiante[i].edad;
-            e1 = arr_estudiante[i];
+            estudiante_mayor = arr_estudiante[i];
         }
     }
-    printf("\nLa mayor edad es: %d, del estudiante: %s %s %s %s ", mayor, e1.primer_nombre, e1.segundo_nombre, e1.primer_apellido, e1.segundo_apellido);
+    char nombre_completo[84];
+    obt_nombre_completo_est(estudiante_mayor, nombre_completo);
+    printf("\nLa mayor edad es: %d, del estudiante: %s", estudiante_mayor.edad, nombre_completo);
 }
 
 void menor_edad(struct Estudiante *arr_estudiante, int cont_est)
 {
-    struct Estudiante e1;
-    int menor = arr_estudiante[0].edad;
-    for (int i = 0; i < cont_est; i++)
+    struct Estudiante estudiante_menor = arr_estudiante[0];
+
+    for (int i = 1; i < cont_est; i++)
     {
-        if (arr_estudiante[i].edad < menor)
+        if (arr_estudiante[i].edad < estudiante_menor.edad)
         {
-            menor = arr_estudiante[i].edad;
-            e1 = arr_estudiante[i];
+            estudiante_menor = arr_estudiante[i];
         }
     }
-    printf("\nLa menor edad es: %d, del estudiante: %s %s %s %s ", menor, e1.primer_nombre, e1.segundo_nombre, e1.primer_apellido, e1.segundo_apellido);
+    char nombre_completo[84];
+    obt_nombre_completo_est(estudiante_menor, nombre_completo);
+    printf("\nLa mayor edad es: %d, del estudiante: %s", estudiante_menor.edad, nombre_completo);
 }
 
 struct Estudiante buscar_est_por_codigo(struct Estudiante *arr_estudiante, int cont_est, char *busqueda)
@@ -196,4 +200,15 @@ void validar_codigo(struct Estudiante *arr_estudiante, int cont_est)
         agregar_estudiante(arr_estudiante, cont_est);
         strcpy(arr_estudiante[cont_est].codigo, codigo);
     }
+}
+
+void obt_nombre_completo_est(struct Estudiante estudiante, char *nombre_completo)
+{
+    strcpy(nombre_completo, estudiante.primer_nombre);
+    strcat(nombre_completo, " ");
+    strcat(nombre_completo, estudiante.segundo_nombre);
+    strcat(nombre_completo, " ");
+    strcat(nombre_completo, estudiante.primer_apellido);
+    strcat(nombre_completo, " ");
+    strcat(nombre_completo, estudiante.segundo_apellido);
 }
