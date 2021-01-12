@@ -23,17 +23,14 @@ int main()
     contador.cont_materia = 0;
     contador.cont_matricula = 0;
     contador.cont_nota = 0;
-    contador.cont_asig_est_no_repetidos = 0;
+    contador.cont_definitivas = 0;
+    
 
     struct Estudiante *arr_estudiante = malloc(MAX_ESTUDIANTES * sizeof(struct Estudiante));
-
     struct Materia *arr_materia = malloc(MAX_MATERIAS * sizeof(struct Materia));
-
     struct Mov_matricula *arr_matricula = malloc(MAX_MATRICULA * sizeof(struct Mov_matricula));
-
     struct Nota *arr_nota = malloc(MAX_NOTAS * sizeof(struct Nota));
-
-    
+    struct Nota *arr_nota_definitva = malloc(MAX_NOTAS * sizeof(struct Nota));
 
     int opcion = 0;
 
@@ -66,7 +63,7 @@ int main()
             menu_nota(arr_matricula, arr_nota, &contador);
             break;
         case 5:
-            menu_informe(arr_nota, arr_estudiante, arr_materia, &contador);
+            menu_informe(arr_nota_definitva, arr_nota, arr_estudiante, arr_materia, arr_matricula, &contador);
             break;
         }
 
@@ -76,4 +73,5 @@ int main()
     free(arr_materia);
     free(arr_nota);
     free(arr_matricula);
+    free(arr_nota_definitva);
 }

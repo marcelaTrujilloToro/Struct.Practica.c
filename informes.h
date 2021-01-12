@@ -3,120 +3,164 @@
 #include <stdlib.h>
 
 //Zona de definición de funciones
-int contar_materias_perdidas_x_est(struct Nota *arr_nota, int cont_nota, struct Estudiante estudiante, struct Contador *contador);
-struct Nota crear_nueva_struct_no_repetidos(struct Nota *arr_nota, struct Nota *arr_asig_est_no_repetidos, int cont_nota, struct Estudiante estudiante, struct Contador *contador);
-void contar_estudiante_con_mas_perdidas(struct Nota *arr_nota, int cont_nota, struct Estudiante *arr_estudiante, int cont_est, struct Contador contador);
+//void contar_estudiante_con_mas_perdidas(struct Nota *arr_nota, int cont_nota, struct Estudiante *arr_estudiante, int cont_est, struct Contador contador);
+float calcular_nota_definitiva_x_estudiante(struct Nota *arr_nota, int cont_nota, char *codigo_estudiante, char *codigo_materia);
+void calcular_nota_definitiva_para_todos_los_estudiantes(struct Nota *arr_nota, int cont_nota, struct Mov_matricula *matricula, int cont_matricula, struct Nota *arr_nota_definitiva, struct Contador *contador);
+void num_est_perdieron_al_menos_una_mat(struct Nota *arr_nota_definitiva, struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matri, struct Estudiante *arr_estudiante, int cont_est, struct Materia *arr_materia, int cont_mat, struct Contador *contador);
+void contar_estudiante_con_mas_perdidas(struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matri, struct Estudiante *arr_estudiante, int cont_est, struct Contador *contador, struct Nota *arr_nota_definitiva);
+int calcular_perdidas_x_estudiante(struct Nota *arr_nota, int cont_nota, char *codigo_estudiante, char *codigo_materia);
+float calcular_promedio_x_estudiante(struct Nota *arr_nota_definitiva, int cont_nota, char *codigo_estudiante, struct Contador contador);
+void mostrar_estudiante_con_promedio_mas_alto(struct Estudiante *arr_estudiante, int cont_est, struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matricula, struct Nota *arr_nota_definitiva, struct Contador contador);
 
-void contar_estudiante_con_mas_perdidas(struct Nota *arr_nota, int cont_nota, struct Estudiante *arr_estudiante, int cont_est, struct Contador contador)
+
+
+void mostrar_estudiante_con_promedio_mas_alto(struct Estudiante *arr_estudiante, int cont_est, struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matricula, struct Nota *arr_nota_definitiva, struct Contador contador)
 {
-    int *notas_perdidas = malloc(cont_nota *sizeof(int));
 
-    char nombre_completo[84];
+    struct Nota *arr_promedios = malloc(MAX_NOTAS * sizeof(struct Nota));
 
-    for (int i = 0; i < cont_nota; i++)
+    float promedio = 0;
+    for (int i = 0; i < contador.cont_definitivas; i++)
     {
-        notas_perdidas[i] = contar_materias_perdidas_x_est(arr_nota, cont_nota, arr_estudiante[i], &contador);
+        promedio = calcular_promedio_x_estudiante(arr_nota_definitiva, contador.cont_definitivas, arr_nota_definitiva[i].cod_estudiante, contador);
+        strcpy(arr_promedios[i].cod_estudiante, arr_nota_definitiva[i].cod_estudiante);
+        arr_promedios[i].nota = promedio;
+    }
+
+    struct Nota mayor_promedio = arr_promedios[0];
+
+    for (int i = 1; i < contador.cont_definitivas; i++)
+    {
+        if (arr_promedios[i].nota > mayor_promedio.nota)
+        {
+            mayor_promedio.nota = arr_promedios[i].nota;
+        }
+    }
+    char nombre_completo[84];
+    struct Estudiante estudiante = buscar_est_por_codigo(arr_estudiante, cont_est, mayor_promedio.cod_estudiante);
+    obt_nombre_completo_est(estudiante, nombre_completo);
+    printf("\nEl estudiante con mayor promedio es: %s con un promedio de %.2f\n", nombre_completo, mayor_promedio.nota);
+
+    free(arr_promedios);
+}
+
+float calcular_promedio_x_estudiante(struct Nota *arr_nota_definitiva, int cont_nota, char *codigo_estudiante, struct Contador contador)
+{
+
+    float suma_notas = 0;
+    int cont_notas_x_est = 0;
+    float promedio = 0;
+
+    for (int i = 0; i < contador.cont_definitivas; i++)
+    {
+        if (strcmp(arr_nota_definitiva[i].cod_estudiante, codigo_estudiante) == 0)
+        {
+            suma_notas = suma_notas + arr_nota_definitiva[i].nota;
+            cont_notas_x_est++;
+        }
+    }
+    promedio = suma_notas / cont_notas_x_est;
+    return promedio;
+}
+
+void contar_estudiante_con_mas_perdidas(struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matri, struct Estudiante *arr_estudiante, int cont_est, struct Contador *contador, struct Nota *arr_nota_definitiva)
+{
+    calcular_nota_definitiva_para_todos_los_estudiantes(arr_nota, cont_nota, arr_matricula, cont_matri, arr_nota_definitiva, contador);
+
+    int *notas_perdidas = malloc(contador->cont_definitivas * sizeof(int));
+
+    for (int i = 0; i < contador->cont_definitivas; i++)
+    {
+        notas_perdidas[i] = calcular_perdidas_x_estudiante(arr_nota, cont_nota, arr_nota[i].cod_estudiante, arr_nota[i].cod_materia);
     }
 
     int mayor_cant_notas_perdidas = notas_perdidas[0];
-    for (int i = 1; i < cont_est; i++)
+    char nombre_completo[84];
+
+    for (int i = 1; i < contador->cont_definitivas; i++)
     {
         if (notas_perdidas[i] > mayor_cant_notas_perdidas)
         {
             mayor_cant_notas_perdidas = notas_perdidas[i];
-            struct Estudiante estudiante = buscar_est_por_codigo(arr_estudiante, cont_est, arr_estudiante[i].codigo);
+            struct Estudiante estudiante = buscar_est_por_codigo(arr_estudiante, cont_est, arr_nota[i].cod_estudiante);
             obt_nombre_completo_est(estudiante, nombre_completo);
         }
     }
-    printf("El estudiante que mas materias perdio fue: %s con %d materias perdidas", nombre_completo, mayor_cant_notas_perdidas);
+    printf("\nEl estudiante que mas materias perdio fue: %s con %d materias perdidas\n", nombre_completo, mayor_cant_notas_perdidas);
+
+    free(notas_perdidas);
 }
 
 //cuantos estudiantes perdieron al menos una materia
-void num_est_perdieron_al_menos_una_mat(struct Nota *arr_nota, int cont_nota, struct Estudiante *arr_estudiante, int cont_est, struct Materia *arr_materia, int cont_mat, struct Contador contador)
+void num_est_perdieron_al_menos_una_mat(struct Nota *arr_nota_definitiva, struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matri, struct Estudiante *arr_estudiante, int cont_est, struct Materia *arr_materia, int cont_mat, struct Contador *contador)
 {
+    calcular_nota_definitiva_para_todos_los_estudiantes(arr_nota, cont_nota, arr_matricula, cont_matri, arr_nota_definitiva, contador);
+
     int contador_est_perdieron_mat = 0;
 
-    for (int i = 0; i < cont_est; i++)
+    printf("\nEstudiantes que perdieron materias:");
+
+    for (int i = 0; i < cont_matri; i++)
     {
-        int cont_materias_perdidas = contar_materias_perdidas_x_est(arr_nota, cont_nota, arr_estudiante[i], &contador);
-        if (cont_materias_perdidas > 0)
+
+        if (arr_nota_definitiva[i].nota < 3 && strcmp(arr_estudiante[i].codigo, arr_nota_definitiva[i].cod_estudiante) == 0)
         {
             struct Estudiante estudiante = buscar_est_por_codigo(arr_estudiante, cont_est, arr_estudiante[i].codigo);
             char nombre_completo[84];
             obt_nombre_completo_est(estudiante, nombre_completo);
-            printf("\nEl estudiante %s perdio %d materias", nombre_completo, cont_materias_perdidas);
+            printf("\n%s ", nombre_completo);
 
             contador_est_perdieron_mat++;
         }
     }
 
-    printf("\n%d estudiante(s) perdieron materias\n", contador_est_perdieron_mat);
+    printf("\nEn total %d estudiante(s) perdieron materias\n", contador_est_perdieron_mat);
 }
 
-struct Nota crear_nueva_struct_no_repetidos(struct Nota *arr_nota, struct Nota *arr_asig_est_no_repetidos, int cont_nota, struct Estudiante estudiante, struct Contador *contador)
+void calcular_nota_definitiva_para_todos_los_estudiantes(struct Nota *arr_nota, int cont_nota, struct Mov_matricula *matricula, int cont_matricula, struct Nota *arr_nota_definitiva, struct Contador *contador)
 {
-    //llenar nueva estructura de no repetidos con la combinación de estudiante-materia sin repetir.
 
+    float nota_definitiva_est = 0;
+    for (int i = 0; i < cont_matricula; i++)
+    {
+        nota_definitiva_est = calcular_nota_definitiva_x_estudiante(arr_nota, cont_nota, matricula[i].cod_estudiante, matricula[i].cod_materia);
+        strcpy(arr_nota_definitiva[i].cod_estudiante, matricula[i].cod_estudiante);
+        strcpy(arr_nota_definitiva[i].cod_materia, matricula[i].cod_materia);
+        arr_nota_definitiva[i].nota = nota_definitiva_est;
+        contador->cont_definitivas++;
+    }
+}
+
+float calcular_nota_definitiva_x_estudiante(struct Nota *arr_nota, int cont_nota, char *codigo_estudiante, char *codigo_materia)
+{
+
+    float nota_definitiva = 0;
+    int cont_notas = 0;
     for (int i = 0; i < cont_nota; i++)
     {
-        int existe_en_no_repetidos = 0;
-        for (int j = 0; j < contador->cont_asig_est_no_repetidos; j++)
+        if (strcmp(arr_nota[i].cod_estudiante, codigo_estudiante) == 0 && strcmp(arr_nota[i].cod_materia, codigo_materia) == 0)
         {
-
-            if (
-                strcmp(arr_nota[i].cod_estudiante, arr_asig_est_no_repetidos[j].cod_estudiante) == 0 && strcmp(arr_nota[i].cod_materia, arr_asig_est_no_repetidos[j].cod_materia) == 0 && strcmp(arr_nota[i].cod_estudiante, estudiante.codigo) == 0)
-
-            {
-                existe_en_no_repetidos = 1;
-            }
-        }
-
-        if (existe_en_no_repetidos == 0 && strcmp(arr_nota[i].cod_estudiante, estudiante.codigo) == 0)
-        {
-
-            struct Nota nota;
-            strcpy(nota.cod_estudiante, arr_nota[i].cod_estudiante);
-            strcpy(nota.cod_materia, arr_nota[i].cod_materia);
-
-            arr_asig_est_no_repetidos[contador->cont_asig_est_no_repetidos] = nota;
-            contador->cont_asig_est_no_repetidos++;
+            nota_definitiva = nota_definitiva + arr_nota[i].nota;
+            cont_notas++;
         }
     }
+    nota_definitiva = nota_definitiva / cont_notas;
+    return nota_definitiva;
 }
 
-int contar_materias_perdidas_x_est(struct Nota *arr_nota, int cont_nota, struct Estudiante estudiante, struct Contador *contador)
+int calcular_perdidas_x_estudiante(struct Nota *arr_nota, int cont_nota, char *codigo_estudiante, char *codigo_materia)
 {
-    int cont_materias_perdidas = 0;
-    //calcular la definitiva
-    struct Nota *arr_asig_est_no_repetidos = malloc(MAX_NOTAS * sizeof(struct Nota));
 
-    crear_nueva_struct_no_repetidos(arr_nota, arr_asig_est_no_repetidos, cont_nota, estudiante, contador);
-
-    for (int i = 0; i < contador->cont_asig_est_no_repetidos; i++)
+    int contador_perdidas = 0;
+    for (int i = 0; i < cont_nota; i++)
     {
-
-        float nota_definitiva_i = 0;
-        int cont_notas_materia = 0;
-        for (int j = 0; j < cont_nota; j++)
+        if (calcular_nota_definitiva_x_estudiante(arr_nota, cont_nota, arr_nota[i].cod_estudiante, arr_nota[i].cod_materia) < 3 && strcmp(arr_nota[i].cod_estudiante, codigo_estudiante) == 0)
         {
-            if (strcmp(arr_nota[j].cod_materia, arr_asig_est_no_repetidos[i].cod_materia) == 0 && strcmp(arr_nota[j].cod_estudiante, arr_asig_est_no_repetidos[i].cod_estudiante) == 0)
-            {
-                nota_definitiva_i = nota_definitiva_i + arr_nota[j].nota;
-                cont_notas_materia++;
-            }
-        }
-
-        nota_definitiva_i = nota_definitiva_i / cont_notas_materia;
-
-        if (nota_definitiva_i < 3)
-        {
-            cont_materias_perdidas++;
+            contador_perdidas++;
         }
     }
 
-    return cont_materias_perdidas;
-
-    free(arr_asig_est_no_repetidos);
+    return contador_perdidas;
 }
 
 void calcular_nota_mas_alta(struct Nota *arr_nota, int cont_nota, struct Estudiante *arr_estudiante, int cont_est, struct Materia *arr_materia, int cont_mat)

@@ -19,11 +19,12 @@ int main()
     struct Materia *arr_materia = malloc(MAX_MATERIAS * sizeof(struct Materia));
     struct Mov_matricula *arr_matricula = malloc(MAX_MATRICULA * sizeof(struct Mov_matricula));
     struct Nota *arr_nota = malloc(MAX_NOTAS * sizeof(struct Nota));
-    struct Nota *arr_asig_est_no_repetidos = malloc(MAX_NOTAS * sizeof(struct Nota));
+    struct Nota *arr_nota_definitva = malloc(MAX_NOTAS * sizeof(struct Nota));
+   
 
     struct Estudiante estudiante = {
         .codigo = "1234",
-        .primer_nombre = "marcela",
+        .primer_nombre = "Marcela",
         .segundo_nombre = "",
         .primer_apellido = "Trujillo",
         .segundo_apellido = "Toro",
@@ -34,7 +35,7 @@ int main()
 
     struct Estudiante estudiante1 = {
         .codigo = "12345",
-        .primer_nombre = "zharick",
+        .primer_nombre = "Zharick",
         .segundo_nombre = "",
         .primer_apellido = "Trujillo",
         .segundo_apellido = "Toro",
@@ -45,14 +46,25 @@ int main()
 
     struct Estudiante estudiante2 = {
         .codigo = "123456",
-        .primer_nombre = "idalys",
-        .segundo_nombre = "Del carmen",
+        .primer_nombre = "Idalys",
+        .segundo_nombre = "Del Carmen",
         .primer_apellido = "Farias",
         .segundo_apellido = "Mendoza",
         .edad = 32,
         .estrato = 3,
         .genero = 'f'};
     arr_estudiante[2] = estudiante2;
+
+    struct Estudiante estudiante3 = {
+        .codigo = "1234567",
+        .primer_nombre = "Jose",
+        .segundo_nombre = "U",
+        .primer_apellido = "Carvajal",
+        .segundo_apellido = "",
+        .edad = 37,
+        .estrato = 5,
+        .genero = 'm'};
+    arr_estudiante[3] = estudiante3;
 
     struct Materia materia = {
         .codigo = "9876",
@@ -67,6 +79,39 @@ int main()
         .num_creditos = 3,
         .costo_credito = 300000};
     arr_materia[1] = materia1;
+
+    struct Mov_matricula matricula1 =
+        {
+            .cod_estudiante = "1234",
+            .cod_materia = "9876",
+        };
+    arr_matricula[0] = matricula1;
+
+    struct Mov_matricula matricula2 =
+        {
+            .cod_estudiante = "12345",
+            .cod_materia = "9876"};
+    arr_matricula[1] = matricula2;
+
+    struct Mov_matricula matricula3 =
+        {
+            .cod_estudiante = "123456",
+            .cod_materia = "9876"};
+    arr_matricula[2] = matricula3;
+
+    struct Mov_matricula matricula4 =
+        {
+            .cod_estudiante = "123456",
+            .cod_materia = "98765",
+        };
+    arr_matricula[3] = matricula4;
+
+    struct Mov_matricula matricula5 =
+        {
+            .cod_estudiante = "1234567",
+            .cod_materia = "98765",
+        };
+    arr_matricula[4] = matricula5;
 
     struct Nota nota = {
         .cod_estudiante = "1234",
@@ -98,28 +143,33 @@ int main()
         .nota = 2};
     arr_nota[4] = nota4;
 
-    struct Nota perdida1 = {
-        .cod_estudiante = "12345",
-        .cod_materia = "9876"};
-    arr_asig_est_no_repetidos[0] = perdida1;
-
-    struct Nota perdida2 = {
-        .cod_estudiante = "123456",
-        .cod_materia = "9876"};
-    arr_asig_est_no_repetidos[1] = perdida2;
-
-    struct Nota perdida3 = {
-        .cod_estudiante = "123456",
-        .cod_materia = "98765"};
-    arr_asig_est_no_repetidos[2] = perdida3;
+     struct Nota nota5 = {
+        .cod_estudiante = "1234567",
+        .cod_materia = "98765",
+        .nota = 5};
+    arr_nota[5] = nota5;
 
     struct Contador contador = {
-        .cont_estudiante = 3,
+        .cont_estudiante = 4,
         .cont_materia = 2,
-        .cont_nota = 5,
-        .cont_asig_est_no_repetidos = 3};
+        .cont_nota = 6,
+        .cont_matricula = 5,
+        .cont_definitivas = 5};
 
-    num_est_perdieron_al_menos_una_mat(arr_nota, contador.cont_nota, arr_estudiante, contador.cont_estudiante, arr_materia, contador.cont_materia, contador);
-    contar_estudiante_con_mas_perdidas(arr_nota, contador.cont_nota, arr_estudiante, contador.cont_estudiante, contador);
+    num_est_perdieron_al_menos_una_mat(arr_nota_definitva, arr_nota, contador.cont_nota, arr_matricula, contador.cont_matricula, arr_estudiante, contador.cont_estudiante, arr_materia, contador.cont_materia, contador);
+    //contar_estudiante_con_mas_perdidas(arr_nota, contador.cont_nota, arr_estudiante, contador.cont_estudiante, contador);
+
+    contar_estudiante_con_mas_perdidas(arr_nota, contador.cont_nota, arr_matricula, contador.cont_matricula, arr_estudiante, contador.cont_estudiante, contador, arr_nota_definitva);
+
+    mostrar_estudiante_con_promedio_mas_alto(arr_estudiante, contador.cont_estudiante, arr_nota, contador.cont_nota, arr_matricula, contador.cont_matricula, arr_nota_definitva, contador);
+
+    
+    free(arr_estudiante);
+    free(arr_materia);
+    free(arr_matricula);
+    free(arr_nota);
+    free(arr_nota_definitva);
+
+
     return 0;
 }
