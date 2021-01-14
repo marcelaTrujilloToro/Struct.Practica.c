@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 //Zona de definición de funciones
-//void contar_estudiante_con_mas_perdidas(struct Nota *arr_nota, int cont_nota, struct Estudiante *arr_estudiante, int cont_est, struct Contador contador);
+
 float calcular_nota_definitiva_x_estudiante(struct Nota *arr_nota, int cont_nota, char *codigo_estudiante, char *codigo_materia);
 void calcular_nota_definitiva_para_todos_los_estudiantes(struct Nota *arr_nota, int cont_nota, struct Mov_matricula *matricula, int cont_matricula, struct Nota *arr_nota_definitiva, struct Contador *contador);
 void num_est_perdieron_al_menos_una_mat(struct Nota *arr_nota_definitiva, struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matri, struct Estudiante *arr_estudiante, int cont_est, struct Materia *arr_materia, int cont_mat, struct Contador *contador);
@@ -11,31 +11,85 @@ void contar_estudiante_con_mas_perdidas(struct Nota *arr_nota, int cont_nota, st
 int calcular_perdidas_x_estudiante(struct Nota *arr_nota, int cont_nota, char *codigo_estudiante, char *codigo_materia);
 float calcular_promedio_x_estudiante(struct Nota *arr_nota_definitiva, int cont_nota, char *codigo_estudiante, struct Contador contador);
 void mostrar_estudiante_con_promedio_mas_alto(struct Estudiante *arr_estudiante, int cont_est, struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matricula, struct Nota *arr_nota_definitiva, struct Contador contador);
+void calcular_prom_mas_alto_entre_hombres_y_mujeres(struct Estudiante *arr_estudiante, int cont_est, struct Nota *arr_nota_definitiva, struct Contador contador);
 
-
-
-void mostrar_estudiante_con_promedio_mas_alto(struct Estudiante *arr_estudiante, int cont_est, struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matricula, struct Nota *arr_nota_definitiva, struct Contador contador)
+void calcular_prom_mas_alto_entre_hombres_y_mujeres(struct Estudiante *arr_estudiante, int cont_est, struct Nota *arr_nota_definitiva, struct Contador contador)
 {
 
     struct Nota *arr_promedios = malloc(MAX_NOTAS * sizeof(struct Nota));
 
     float promedio = 0;
-    for (int i = 0; i < contador.cont_definitivas; i++)
+
+    for (int i = 0; i < contador.cont_nota; i++)
     {
-        promedio = calcular_promedio_x_estudiante(arr_nota_definitiva, contador.cont_definitivas, arr_nota_definitiva[i].cod_estudiante, contador);
+        promedio = calcular_promedio_x_estudiante(arr_nota_definitiva, contador.cont_nota, arr_nota_definitiva[i].cod_estudiante, contador);
+        strcpy(arr_promedios[i].cod_estudiante, arr_nota_definitiva[i].cod_estudiante);
+        arr_promedios[i].nota = promedio;
+    }
+
+    float suma_femenino = 0;
+    float suma_masculino = 0;
+    int cont_femenino = 0;
+    int cont_masculino = 0;
+
+    for (int i = 0; i < contador.cont_nota; i++)
+    {
+        struct Estudiante estudiante = buscar_est_por_codigo(arr_estudiante, cont_est, arr_promedios[i].cod_estudiante);
+
+        if (estudiante.genero == 'f')
+        {
+            suma_femenino = suma_femenino + arr_promedios[i].nota;
+            cont_femenino++;
+        }
+        else if (estudiante.genero == 'm')
+        {
+            suma_masculino = suma_masculino + arr_promedios[i].nota;
+            cont_masculino++;
+        }
+    }
+
+    float promedio_femenino = 0;
+    float promedio_masculino = 0;
+    promedio_femenino = suma_femenino / cont_femenino;
+    promedio_masculino = suma_masculino / cont_masculino;
+
+    if (promedio_femenino > promedio_masculino)
+    {
+        printf("\nLas mujeres tienen mayor promedio que los hombres.");
+        printf("\nPromedio femenino: %.2f, promedio masculino: %.2f\n", promedio_femenino, promedio_masculino);
+    }
+    else
+    {
+        printf("\nLos hombres tienen mayor promedio que las mujeres.");
+        printf("\nPromedio masculino: %.2f, promedio femenino: %.2f\n", promedio_masculino, promedio_femenino);
+    }
+
+    free(arr_promedios);
+}
+
+void mostrar_estudiante_con_promedio_mas_alto(struct Estudiante *arr_estudiante, int cont_est, struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matricula, struct Nota *arr_nota_definitiva, struct Contador contador)
+{
+    struct Nota *arr_promedios = malloc(MAX_NOTAS * sizeof(struct Nota));
+    float promedio = 0;
+
+    for (int i = 0; i < cont_nota; i++)
+    {
+        promedio = calcular_promedio_x_estudiante(arr_nota_definitiva, cont_nota, arr_nota_definitiva[i].cod_estudiante, contador);
         strcpy(arr_promedios[i].cod_estudiante, arr_nota_definitiva[i].cod_estudiante);
         arr_promedios[i].nota = promedio;
     }
 
     struct Nota mayor_promedio = arr_promedios[0];
 
-    for (int i = 1; i < contador.cont_definitivas; i++)
+    for (int i = 1; i < cont_nota; i++)
     {
         if (arr_promedios[i].nota > mayor_promedio.nota)
         {
             mayor_promedio.nota = arr_promedios[i].nota;
+            strcpy(mayor_promedio.cod_estudiante, arr_promedios[i].cod_estudiante);
         }
     }
+
     char nombre_completo[84];
     struct Estudiante estudiante = buscar_est_por_codigo(arr_estudiante, cont_est, mayor_promedio.cod_estudiante);
     obt_nombre_completo_est(estudiante, nombre_completo);
@@ -65,7 +119,6 @@ float calcular_promedio_x_estudiante(struct Nota *arr_nota_definitiva, int cont_
 
 void contar_estudiante_con_mas_perdidas(struct Nota *arr_nota, int cont_nota, struct Mov_matricula *arr_matricula, int cont_matri, struct Estudiante *arr_estudiante, int cont_est, struct Contador *contador, struct Nota *arr_nota_definitiva)
 {
-    calcular_nota_definitiva_para_todos_los_estudiantes(arr_nota, cont_nota, arr_matricula, cont_matri, arr_nota_definitiva, contador);
 
     int *notas_perdidas = malloc(contador->cont_definitivas * sizeof(int));
 
@@ -97,7 +150,6 @@ void num_est_perdieron_al_menos_una_mat(struct Nota *arr_nota_definitiva, struct
     calcular_nota_definitiva_para_todos_los_estudiantes(arr_nota, cont_nota, arr_matricula, cont_matri, arr_nota_definitiva, contador);
 
     int contador_est_perdieron_mat = 0;
-
     printf("\nEstudiantes que perdieron materias:");
 
     for (int i = 0; i < cont_matri; i++)
@@ -109,7 +161,6 @@ void num_est_perdieron_al_menos_una_mat(struct Nota *arr_nota_definitiva, struct
             char nombre_completo[84];
             obt_nombre_completo_est(estudiante, nombre_completo);
             printf("\n%s ", nombre_completo);
-
             contador_est_perdieron_mat++;
         }
     }

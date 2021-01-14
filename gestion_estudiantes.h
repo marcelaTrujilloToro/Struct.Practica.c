@@ -46,8 +46,10 @@ int buscar_est(struct Estudiante *arr_estudiante, int cont_est, char *busqueda)
         {
             encontrado = 1;
             break;
+        }else
+        {
+            encontrado = 0;
         }
-        encontrado = 0;
     }
     return encontrado;
 }

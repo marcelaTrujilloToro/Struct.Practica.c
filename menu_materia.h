@@ -37,7 +37,7 @@ void menu_mat(struct Materia *arr_materia, struct Contador *contador)
             scanf("%s", &busqueda);
             struct Materia materia;
             materia = buscar_mat_por_codigo(arr_materia, contador->cont_materia, busqueda);
-            printf("%s", materia.nombre);
+            printf("%s, creditos: %d, costo por credito: $ %.d", materia.nombre, materia.num_creditos, materia.costo_credito);
         }
     } while (opcion != OPCION);
 }

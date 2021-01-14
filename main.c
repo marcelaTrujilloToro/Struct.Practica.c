@@ -4,7 +4,7 @@
 #include "estructuras.h"
 #include "gestion_estudiantes.h"
 #include "gestion_materias.h"
-#include "mov_matricula.h"
+#include "gestion_matricula.h"
 #include "menu_materia.h"
 #include "menu_estudiante.h"
 #include "menu_matricula.h"

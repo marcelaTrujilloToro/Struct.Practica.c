@@ -46,7 +46,7 @@ void validar_matricula(struct Mov_matricula *arr_matricula, int cont_matri, stru
     char codigo_mat[15];
     int est_encontrado = 0;
     int mat_encontrado = 0;
-    int comparacion_codigos_mat_est = 0;
+    int comparacion_codigos_mat_est = 1;
 
     printf("\nLISTADO DE ESTUDIANTES:");
     printf("\n----------------------\n");
@@ -66,14 +66,15 @@ void validar_matricula(struct Mov_matricula *arr_matricula, int cont_matri, stru
         scanf("%s", &codigo_mat);
         mat_encontrado = buscar_materia(arr_materia, cont_mat, codigo_mat);
 
-        if (est_encontrado == 1 && mat_encontrado == 1)
+        if ((est_encontrado == 1) && (mat_encontrado == 1))
         {
             comparacion_codigos_mat_est = validar_codigo_de_est_y_mat(arr_matricula, cont_matri, codigo_est, codigo_mat);
-        }        
+        }
 
     } while (comparacion_codigos_mat_est == 1);
-    
+
     agregar_matricula(arr_matricula, cont_mat, arr_estudiante, cont_est, arr_materia, cont_mat);
     strcpy(arr_matricula[cont_matri].cod_estudiante, codigo_est);
     strcpy(arr_matricula[cont_matri].cod_materia, codigo_mat);
+    
 }

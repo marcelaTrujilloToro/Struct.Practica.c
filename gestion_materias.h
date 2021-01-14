@@ -29,8 +29,10 @@ int buscar_materia(struct Materia *arr_materia, int cont_mat, char *codigo)
         {
             encontrado = 1;
             break;
-        }
-        encontrado = 0;
+        }else
+        {
+            encontrado = 0;
+        }        
     }
     return encontrado;
 }

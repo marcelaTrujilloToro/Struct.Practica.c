@@ -17,7 +17,7 @@ void menu_informe(struct Nota *arr_nota_definitiva, struct Nota *arr_nota, struc
         printf("2. Cantidad de estudiantes que perdieron materias.\n");
         printf("3. Mostrar el estudiante con mas materias perdidas.\n");
         printf("4. Mostrar el estudiante con promedio de notas mas alto.\n");
-
+        printf("5. Mostrar quien tiene promedio mas alto: los hombres o las mujeres.\n");
         printf("6. Regresar al menu principal\n");
 
         printf("Digite una opcion:\n");
@@ -36,6 +36,9 @@ void menu_informe(struct Nota *arr_nota_definitiva, struct Nota *arr_nota, struc
             break;
         case 4:
             mostrar_estudiante_con_promedio_mas_alto(arr_estudiante, contador->cont_estudiante, arr_nota, contador->cont_nota, arr_matricula, contador->cont_matricula, arr_nota_definitiva, *contador);
+            break;
+        case 5:
+            calcular_prom_mas_alto_entre_hombres_y_mujeres(arr_estudiante, contador->cont_estudiante, arr_nota_definitiva, *contador);
         }
 
     } while (opcion != SALIDA);
